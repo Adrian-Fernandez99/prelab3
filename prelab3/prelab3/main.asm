@@ -33,25 +33,33 @@ START:
 
 // Configuración del MCU
 SETUP:
-// Desavilitamos interrupciones mientras seteamos todo
+	// Desavilitamos interrupciones mientras seteamos todo
 	CLI
 
-// Configurar Prescaler "Principal"
+	// Configurar Prescaler "Principal"
 	LDI		R16, (1 << CLKPCE)
 	STS		CLKPR, R16		// Habilitar cambio de PRESCALER
 	LDI		R16, 0x04
 	STS		CLKPR, R16		// Configurar Prescaler a 16 F_cpu = 1MHz
 
-// Deshabilitar serial (esto apaga los demas LEDs del Arduino)
+	// Deshabilitar serial (esto apaga los demas LEDs del Arduino)
 	LDI		R16, 0x00
 	STS		UCSR0B, R16
 
-// PORTD como entrada con pull-up habilitado
+	// Habilitamos interrupcionees para el INT0
+	LDI		R16, (1 << INT1) | (1 << INT0)
+	STS		EIMSK, R16
+
+	// Habilitamos interrupcionees para el INT1
+	LDI		R16, (1 << ISC10) | (1 << ISC00)
+	STS		EICRA, R16
+
+	// PORTD como entrada con pull-up habilitado
 	LDI		R16, 0x00
 	OUT		DDRD, R16		// Setear puerto B como entrada
 	LDI		R16, 0xFF
 	OUT		PORTD, R16		// Habilitar pull-ups en puerto B
 
-// Configurar puerto C como una salida
+	// Configurar puerto C como una salida
 	LDI		R16, 0xFF
 	OUT		DDRC, R16		// Setear puerto C como salida
