@@ -65,36 +65,36 @@ SETUP:
 	OUT		DDRC, R16		// Setear puerto C como salida
 
 	// Realizar variables
-	LDI		R16, 0x00
-	LDI		R17, 0x00
+	LDI		R16, 0x00		// Registro del contador
+	LDI		R17, 0x00		// Registro de lectura de botones
 
 	// Activamos las interrupciones
 	SEI
 
 // Main loop
 MAIN_LOOP:
-	OUT		PORTC, R16
+	OUT		PORTC, R16		// Se loopea la salida del puerto
 	JMP		MAIN_LOOP
 
 // NON-Interrupt subroutines
 
 // Interrupt routines
 INCREMENTO:
-	IN		R17, PIND
-	CPI		R17, 0xFB
-	BRNE	FINAL2
-	INC		R16
-	SBRC	R16, 4
+	IN		R17, PIND		// Se ingresa la configuración del PIND
+	CPI		R17, 0xFB		// Se compara para ver si el botón está presionado
+	BRNE	FINAL2			// Si no esta preionado termina la interrupción
+	INC		R16				// Si está presionado incrementa
+	SBRC	R16, 4			// Si genera overflow reinicia contador
 	LDI		R16, 0x00
 	FINAL:
-	RETI
+	RETI					// Regreso de la interrupción
 
 DECREMENTO:
-	IN		R17, PIND
-	CPI		R17, 0xF7
-	BRNE	FINAL2
-	DEC		R16
-	SBRC	R16, 4
+	IN		R17, PIND		// Se ingresa la configuración del PIND
+	CPI		R17, 0xF7		// Se compara para ver si el botón está presionado
+	BRNE	FINAL2			// Si no esta preionado termina la interrupción
+	DEC		R16				// Si está presionado decrementa
+	SBRC	R16, 4			// Si genera underflow reinicia contador
 	LDI		R16, 0x0F
 	FINAL2: 
-	RETI
+	RETI					// Regreso de la interrupción
