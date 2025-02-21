@@ -46,19 +46,19 @@ SETUP:
 	LDI		R16, 0x00
 	STS		UCSR0B, R16
 
-	// Habilitamos interrupcionees para el INT0
+	// Habilitamos interrupcionees para el INT0 e INT1
 	LDI		R16, (1 << INT1) | (1 << INT0)
-	STS		EIMSK, R16
+	OUT		EIMSK, R16
 
-	// Habilitamos interrupcionees para el INT1
+	// Habilitamos interrupcionees para cualquier cambio logico
 	LDI		R16, (1 << ISC10) | (1 << ISC00)
 	STS		EICRA, R16
 
 	// PORTD como entrada con pull-up habilitado
 	LDI		R16, 0x00
-	OUT		DDRD, R16		// Setear puerto B como entrada
+	OUT		DDRD, R16		// Setear puerto D como entrada
 	LDI		R16, 0xFF
-	OUT		PORTD, R16		// Habilitar pull-ups en puerto B
+	OUT		PORTD, R16		// Habilitar pull-ups en puerto D
 
 	// Configurar puerto C como una salida
 	LDI		R16, 0xFF
@@ -66,6 +66,9 @@ SETUP:
 
 	// Realizar variables
 	LDI		R16, 0x00
+
+	// Activamos las interrupciones
+	SEI
 
 // Main loop
 MAIN_LOOP:
@@ -84,5 +87,5 @@ INCREMENTO:
 DECREMENTO:
 	DEC		R16
 	SBRC	R16, 4
-	LDI		R16, 0xFF
+	LDI		R16, 0x0F
 	RETI
