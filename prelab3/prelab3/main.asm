@@ -66,6 +66,7 @@ SETUP:
 
 	// Realizar variables
 	LDI		R16, 0x00
+	LDI		R17, 0x00
 
 	// Activamos las interrupciones
 	SEI
@@ -79,13 +80,21 @@ MAIN_LOOP:
 
 // Interrupt routines
 INCREMENTO:
+	IN		R17, PIND
+	CPI		R17, 0xFB
+	BRNE	FINAL2
 	INC		R16
 	SBRC	R16, 4
 	LDI		R16, 0x00
+	FINAL:
 	RETI
 
 DECREMENTO:
+	IN		R17, PIND
+	CPI		R17, 0xF7
+	BRNE	FINAL2
 	DEC		R16
 	SBRC	R16, 4
 	LDI		R16, 0x0F
+	FINAL2: 
 	RETI
