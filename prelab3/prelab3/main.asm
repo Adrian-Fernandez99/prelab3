@@ -19,10 +19,10 @@ Descripción:
 	JMP		START
 
 .org		INT0addr
-	JMP		
+	JMP		INCREMENTO
 
 .org		INT1addr
-	JMP		
+	JMP		DECREMENTO
 
 // Configuración de la pila
 START:
@@ -63,3 +63,26 @@ SETUP:
 	// Configurar puerto C como una salida
 	LDI		R16, 0xFF
 	OUT		DDRC, R16		// Setear puerto C como salida
+
+	// Realizar variables
+	LDI		R16, 0x00
+
+// Main loop
+MAIN_LOOP:
+	OUT		PORTC, R16
+	JMP		MAIN_LOOP
+
+// NON-Interrupt subroutines
+
+// Interrupt routines
+INCREMENTO:
+	INC		R16
+	SBRC	R16, 4
+	LDI		R16, 0x00
+	RETI
+
+DECREMENTO:
+	DEC		R16
+	SBRC	R16, 4
+	LDI		R16, 0xFF
+	RETI
